@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+/**样式初始化**/
+body{background: #fff;font:14px "微软雅黑";width: 100%;}
+body,ul,li,ol,li,dl,dt,dd,p,a{margin:0;padding:0;}
+ul,li{list-style:none;}
+img {border: 0 none;vertical-align: top;}
+a,a:hover{color:#333;text-decoration:none;}
+a,input,img,select,textarea{outline:none;}
+
+/**CommonStyle**/
+.clearfix:before,.clearfix:after{content:"";display:table;}
+.clearfix:after{clear:both;}
+.clearfix{*zoom:1;}
+.clear{clear:both;}
+.fl{float:left;}
+.fr{float:right;}
+.Ovis{overflow:hidden;}
+.Odis{display:block;}
+
+.clearfloat{zoom: 1;}
+.clearfloat:after{display: block;clear: both;content: "";visibility: hidden;height: 0;}
+.public-container{position: relative;margin: 0 auto;width: 1024px;}
+
+
+
+
+

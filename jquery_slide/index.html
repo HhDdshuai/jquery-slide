@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>封装</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <!--<script type="text/javascript" src="js/bootstrap.min.js"></script>-->
+    <style>
+        .carousel {margin: 20px auto;width: 360px;height: 240px;overflow: hidden;position: relative;z-index: 1;}
+        .img_ct{position: relative;font-size: 0;}
+        .img_ct li{float: left;}
+        .arrow{width: 24px;height: 24px;background-color: #000;border-radius: 50%;opacity: 0.3; color: #fff;z-index: 11;position: absolute;top: 50%;margin-top: -12px;text-align: center;line-height: 24px;}
+        /*.carousel:hover .arrow{display: block;}*/
+        .pre{left: 5px;}
+        .arrow:hover{opacity: 0.5;text-decoration: none;}
+        .next{right: 5px;}
+        .buulet_ct{width: 100%;height: 20px;position: absolute;left: 0;bottom: 5px;text-align: center;}
+        .bullet{display: inline-block;}
+        /*.bullet:after{display: block;content: "";clear: both;}*/
+        .bullet>li{display: inline-block;width: 20px;height: 6px;border-radius: 3px;background-color: #fff;margin: 0 5px;cursor: pointer;}
+        .bullet .active{background-color: #F8441D;}
+    </style>
+    <script>
+        $(function(){
+            var $carousel = $('.carousel'),
+                $img_ct = $('.img_ct'),
+                $liArr = $('.img_ct li'),
+                $preBtn = $('.pre'),
+                $nextBtn = $('.next'),
+                $imgLen = $liArr.length,
+                $imgWidth = $liArr.width(),
+                $firstImg = $img_ct.find('li').first(),
+                $lastImg = $img_ct.find('li').last(),
+                $bullet_items = $('#bullet li')
+
+            $img_ct.append($firstImg.clone())
+            $img_ct.prepend($lastImg.clone())
+
+            var $imgLength = $('.img_ct li').length
+
+            $img_ct.css({'width':$imgWidth * $imgLength,'left':-$imgWidth})
+
+            var flag = true
+            $nextBtn.on('click',function(){
+                flag = true
+                playNext(1)
+            })
+            $preBtn.on('click',function(){
+                flag = true
+                playNext(-1)
+            })
+
+            var curPageIndex = 0
+
+            function playNext(i){
+                var distance =  $imgWidth * i + 'px'
+                    //console.log(distance)
+                    $img_ct.stop(false,true).animate({
+                        left: '-=' + distance
+                    },function(){
+                        if(flag){
+                            if(i > 0){
+                                curPageIndex++
+                                if(curPageIndex === $imgLen){
+                                    $img_ct.css('left',-$imgWidth)
+                                    curPageIndex = 0
+                                }
+                            }
+                            if(i < 0){
+                                curPageIndex--
+                                if(curPageIndex < 0){
+                                    $img_ct.css('left',-($imgWidth * $imgLen))
+                                    curPageIndex = $imgLen - 1
+                                }
+                            }
+                            $bullet_items.eq(curPageIndex).addClass('active').siblings().removeClass('active')
+                        }
+                    })
+            }
+
+            $bullet_items.on('click',function(){
+                var newDis = $(this).index() - curPageIndex
+                    flag = false
+
+                    $(this).addClass('active').siblings().removeClass('active')
+                    curPageIndex = $(this).index()
+                    playNext(newDis)
+            })
+            var timer = null
+                timer = setInterval(function(){
+                    flag = true
+                    playNext(1)
+                },2000)
+
+            $carousel.mouseover(function(){
+                clearInterval(timer)
+            })  
+            $carousel.mouseout(function(){
+                timer = setInterval(function(){
+                    flag = true
+                    playNext(1)
+                },2000)
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div class="carousel">
+        <ul class="img_ct">
+            <li data-index=0>
+                <a href="javascript:;"><img src="imgs/1.jpg" alt=""></a>
+            </li>
+            <li data-index=1>
+                <a href="javascript:;"><img src="imgs/2.jpg" alt=""></a>
+            </li>
+            <li data-index=2>
+                <a href="javascript:;"><img src="imgs/3.jpg" alt=""></a>
+            </li>
+            <li data-index=3>
+                <a href="javascript:;"><img src="imgs/4.jpg" alt=""></a>
+            </li>
+            <!--<li data-index=4>
+                <a href="javascript:;"><img src="imgs/5.jpg" alt=""></a>
+            </li>
+            <li data-index=5>
+                <a href="javascript:;"><img src="imgs/6.jpg" alt=""></a>
+            </li>-->
+        </ul>
+        <a class="pre arrow" href="javascript:;">&lt;</a>
+        <a class="next arrow" href="javascript:;">&gt;</a>
+        <div class="buulet_ct">
+            <ul class="bullet" id="bullet">
+                <li class="active"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <!--<li></li>
+                <li></li>-->
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
